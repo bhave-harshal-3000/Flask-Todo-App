@@ -1,0 +1,71 @@
+{% extends 'base_template.html' %}
+{% block title  %} Home {% endblock title %}
+{% block body %}
+    
+    <div class="container">
+        <h1 class="mb-3">Add a ToDo</h1>
+        <form action="/" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">ToDo Title</label>
+                <input type="text" class="form-control" name="title" id="title">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">ToDo Description</label>
+                <input type="text" class="form-control" name="description" id="description">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="mb-3">Your ToDos</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Time</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% if alltodo %}
+                {% for todo in alltodo %}
+                <tr>
+                    <th scope="row">{{loop.index}}</th>
+                    <td>{{todo.title}}</td>
+                    <td>{{todo.description}}</td>
+                    <td>{{todo.date_created}}</td>
+                    <td><a href="/delete/{{todo.sno}}" type="button"
+                            class="btn btn-light btn btn-outline-dark">Delete</a></td>
+     
+                    <td><a href="/update/{{todo.sno}}" type="button"
+                            class="btn btn-light btn btn-outline-dark">Update</a></td>
+                </tr>
+                {% endfor %}
+
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No todos yet. Add one above!</td>
+                </tr>
+                {% endif %}
+
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <style>
+        table tr td:nth-child(3) {
+            width: 40vw;
+            ;
+        }
+    </style>
+
+    
+{% endblock body %}
