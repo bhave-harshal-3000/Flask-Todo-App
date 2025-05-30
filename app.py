@@ -35,31 +35,33 @@ def rendertemplate():
 
 
 
-@app.route('/delete/<int:sno>')
+@app.route("/update/<int:sno>", methods=['GET', 'POST'])
+def update(sno):
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        todo = Todo.query.filter_by(sno=sno).first()
+        todo.title = title
+        todo.description = description
+        db.session.commit()
+        return redirect("/")
+    todo = Todo.query.filter_by(sno=sno).first()
+    return render_template('update.html', todo=todo)
+
+@app.route("/delete/<int:sno>")
 def deletetodo(sno):
-    todo = db.session.execute(db.select(Todo).filter_by(sno=sno)).scalar_one()
+    todo = Todo.query.filter_by(sno=sno).first()
     db.session.delete(todo)
     db.session.commit()
     return redirect("/")
+
 
 
 @app.route('/about')
 def about():
     return render_template("about.html")
 
-@app.route("/update/<int:sno>",methods=["GET","POST"])
-def update(sno):
-    if request.method== "POST":
-        todo = db.session.execute(db.select(Todo).filter_by(sno=sno)).scalar_one()
-        title=request.form['title']
-        description=request.form['description']
-        todo.title=title
-        todo.description=description
-        todo.verified = True
-        db.session.commit()
-        return redirect("/")
-    todo = db.session.execute(db.select(Todo).filter_by(sno=sno)).scalar_one()
-    return render_template("update.html",todo=todo)
+
 
 if __name__== '__main__':
     app.run(debug=True,port=8000)
